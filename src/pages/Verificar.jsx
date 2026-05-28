@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import verificarService from '../services/verificarService';
 import NumericKeypad from '../components/NumericKeypad';
-import { HiOutlineX, HiOutlineCheckCircle, HiOutlineCalendar, HiOutlineUser } from 'react-icons/hi';
+import { HiOutlineX, HiOutlineCheckCircle, HiOutlineCalendar, HiOutlineUser, HiDownload } from 'react-icons/hi';
 
 const Verificar = () => {
   const navigate = useNavigate();
@@ -11,7 +11,6 @@ const Verificar = () => {
   const [resultado, setResultado] = useState(null);
   const [error, setError] = useState('');
 
-  // Manejar teclas físicas
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (loading) return;
@@ -53,10 +52,51 @@ const Verificar = () => {
     }
   };
 
+  const registrarAlmuerzo = async (empleado_id = null) => {
+    setLoading(true);
+    
+    try {
+      const response = await verificarService.registrar(empleado_id, input);
+      setResultado({ ...response.data, justRegistered: true });
+    } catch (err) {
+      setError('Error al registrar. Intente nuevamente.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const reiniciar = () => {
     setInput('');
     setResultado(null);
     setError('');
+  };
+
+  const descargarTicket = async (ticket_codigo) => {
+    try {
+      const response = await verificarService.descargarTicket(ticket_codigo);
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `ticket_${ticket_codigo}.png`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(() => window.URL.revokeObjectURL(url), 100);
+    } catch (error) {
+      console.error('Error downloading ticket:', error);
+    }
+  };
+
+  const imprimirTicket = async (ticket_codigo) => {
+    try {
+      const response = await verificarService.descargarTicket(ticket_codigo);
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const printWindow = window.open(url, '_blank');
+      printWindow?.focus();
+      setTimeout(() => window.URL.revokeObjectURL(url), 100);
+    } catch (error) {
+      console.error('Error printing ticket:', error);
+    }
   };
 
   const fechaActual = new Date().toLocaleDateString('es-CO', {
@@ -66,9 +106,11 @@ const Verificar = () => {
     day: 'numeric'
   });
 
+  const isRegistrado = resultado?.tipo === 'registrado' || resultado?.justRegistered;
+  const isNoRegistrado = resultado?.tipo === 'no_registrado';
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      {/* Header */}
       <header className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
           <h1 className="text-xl font-bold text-gray-900">Verificador de Almuerzo</h1>
@@ -81,14 +123,12 @@ const Verificar = () => {
         </div>
       </header>
 
-      {/* Fecha */}
       <div className="text-center py-4 text-sm text-gray-600 capitalize">
         {fechaActual}
       </div>
 
-      {/* Contenido principal */}
       <main className="flex-1 flex items-center justify-center px-4">
-        {!resultado ? (
+        {!resultado || input.length !== 4 ? (
           <div className="w-full max-w-sm">
             <div className="text-center mb-6">
               <HiOutlineUser className="h-12 w-12 text-indigo-600 mx-auto mb-3" />
@@ -106,7 +146,6 @@ const Verificar = () => {
               </div>
             )}
 
-            {/* Input oculto para lectores de código de barras */}
             <input
               type="text"
               value={input}
@@ -115,7 +154,6 @@ const Verificar = () => {
               autoFocus
             />
 
-            {/* Display del número */}
             <div className="flex justify-center space-x-2 mb-6">
               {[0, 1, 2, 3].map((i) => (
                 <div
@@ -129,7 +167,6 @@ const Verificar = () => {
               ))}
             </div>
 
-            {/* Teclado numérico */}
             <NumericKeypad
               onKeyPress={handleKeypadPress}
               onEnter={verificar}
@@ -167,7 +204,8 @@ const Verificar = () => {
                     {resultado.empleados.map(emp => (
                       <button
                         key={emp.id}
-                        onClick={() => setInput(emp.cedula.slice(-4))}
+                        onClick={() => registrarAlmuerzo(emp.id)}
+                        disabled={loading}
                         className="w-full p-3 bg-gray-50 rounded-md text-left hover:bg-gray-100"
                       >
                         {emp.nombre_completo}
@@ -178,15 +216,15 @@ const Verificar = () => {
               </div>
             ) : (
               <div className={`p-6 rounded-lg shadow-md ${
-                resultado.tipo === 'registrado' ? 'bg-green-50' : 'bg-blue-50'
+                isRegistrado ? 'bg-green-50' : 'bg-blue-50'
               }`}>
                 <HiOutlineCheckCircle className={`h-16 w-16 mx-auto mb-4 ${
-                  resultado.tipo === 'registrado' ? 'text-green-600' : 'text-blue-600'
+                  isRegistrado ? 'text-green-600' : 'text-blue-600'
                 }`} />
                 <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                  {resultado.tipo === 'registrado' 
-                    ? '¡Sí recibiste tu almuerzo!' 
-                    : 'Aún no has recibido tu almuerzo'}
+                  {isRegistrado 
+                    ? '¡Correcto! Puedes recibir tu almuerzo' 
+                    : 'Aún no has recibido tu almuerzo. ¿Deseas registrarlo?'}
                 </h2>
                 
                 <div className="text-left space-y-2 bg-white p-4 rounded-md">
@@ -203,10 +241,38 @@ const Verificar = () => {
                       })}
                     </p>
                   )}
-                  {resultado.registro?.ticket_codigo && (
-                    <p><span className="font-medium">Código:</span> {resultado.registro.ticket_codigo}</p>
+                  {resultado.ticket_codigo && (
+                    <p><span className="font-medium">Código:</span> {resultado.ticket_codigo}</p>
                   )}
                 </div>
+
+                {isNoRegistrado && !resultado.justRegistered && (
+                  <button
+                    onClick={() => registrarAlmuerzo()}
+                    disabled={loading}
+                    className="mt-4 w-full px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:opacity-50"
+                  >
+                    {loading ? 'Registrando...' : 'Recibir Almuerzo'}
+                  </button>
+                )}
+
+                {isRegistrado && resultado.ticket_codigo && (
+                  <div className="mt-4 flex space-x-2">
+                    <button
+                      onClick={() => descargarTicket(resultado.ticket_codigo)}
+                      className="flex-1 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 flex items-center justify-center"
+                    >
+                      <HiDownload className="h-4 w-4 mr-1" />
+                      Descargar
+                    </button>
+                    <button
+                      onClick={() => imprimirTicket(resultado.ticket_codigo)}
+                      className="flex-1 px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700"
+                    >
+                      Imprimir
+                    </button>
+                  </div>
+                )}
               </div>
             )}
 
@@ -214,7 +280,7 @@ const Verificar = () => {
               onClick={reiniciar}
               className="w-full mt-4 px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
             >
-              Verificar otro
+              Continuar (otro empleado)
             </button>
           </div>
         )}
