@@ -236,7 +236,6 @@ const Tickets = () => {
                   <p><span className="font-bold">NOMBRE:</span> {selectedTicket.empleado?.nombre_completo || 'N/A'}</p>
                   <p><span className="font-bold">CC:</span> {selectedTicket.empleado?.cedula || 'N/A'}</p>
                   <p><span className="font-bold">FECHA:</span> {new Date().toLocaleDateString('es-CO')} - {new Date().toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' })}</p>
-                  <p><span className="font-bold">CÓDIGO:</span> {selectedTicket.ticket_codigo}</p>
                 </div>
               </div>
 
