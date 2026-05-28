@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import verificarService from '../services/verificarService';
-import { HiOutlineX, HiOutlineCheckCircle, HiOutlineCalendar, HiOutlineUser, HiDownload, HiLogin } from 'react-icons/hi';
+import { HiOutlineX, HiOutlineCheckCircle, HiOutlineCalendar, HiOutlineUser, HiDownload, HiArrowLeft } from 'react-icons/hi';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 
 const Verificar = () => {
   const navigate = useNavigate();
@@ -9,32 +11,47 @@ const Verificar = () => {
   const [loading, setLoading] = useState(false);
   const [resultado, setResultado] = useState(null);
   const [error, setError] = useState('');
+  const inputRef = useRef(null);
 
   useEffect(() => {
+    const focusInput = () => {
+      inputRef.current?.focus();
+    };
+    
+    focusInput();
+    
     const handleKeyDown = (e) => {
       if (loading) return;
       
       if (e.key >= '0' && e.key <= '9') {
-        setInput(prev => prev.length < 4 ? prev + e.key : prev);
+        setInput(prev => {
+          const newInput = prev.length < 4 ? prev + e.key : prev;
+          if (newInput.length === 4) {
+            setTimeout(() => verificar(newInput), 100);
+          }
+          return newInput;
+        });
       } else if (e.key === 'Backspace') {
         setInput(prev => prev.slice(0, -1));
-      } else if (e.key === 'Enter') {
-        if (input.length === 4) verificar();
+        if (resultado) {
+          setResultado(null);
+          setError('');
+        }
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [input, loading]);
+  }, [loading, resultado]);
 
-  const verificar = async () => {
-    if (input.length !== 4) return;
+  const verificar = async (codigo = input) => {
+    if (codigo.length !== 4) return;
     
     setLoading(true);
     setError('');
     
     try {
-      const response = await verificarService.verificarPorCedula(input);
+      const response = await verificarService.verificarPorCedula(codigo);
       setResultado(response.data);
     } catch (err) {
       setError('Error al verificar. Intente nuevamente.');
@@ -60,6 +77,7 @@ const Verificar = () => {
     setInput('');
     setResultado(null);
     setError('');
+    focusInput();
   };
 
   const descargarTicket = async (ticket_codigo) => {
@@ -90,36 +108,14 @@ const Verificar = () => {
     }
   };
 
-  const fechaActual = new Date().toLocaleDateString('es-CO', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
-
   const isRegistrado = resultado?.tipo === 'registrado' || resultado?.justRegistered;
   const isNoRegistrado = resultado?.tipo === 'no_registrado';
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      <header className="bg-white/80 backdrop-blur-sm shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-xl font-bold text-gray-900">Verificador de Almuerzo</h1>
-          <button
-            onClick={() => navigate('/login')}
-            className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors"
-          >
-            <HiLogin className="h-4 w-4 mr-2" />
-            Iniciar sesión
-          </button>
-        </div>
-      </header>
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex flex-col">
+      <Navbar />
 
-      <div className="text-center py-4 text-sm text-gray-600 capitalize">
-        {fechaActual}
-      </div>
-
-      <main className="flex-1 flex items-center justify-center px-4">
+      <main className="flex-1 flex items-center justify-center px-4 py-8">
         {!resultado || input.length !== 4 ? (
           <div className="w-full max-w-sm">
             <div className="text-center mb-8">
@@ -138,37 +134,56 @@ const Verificar = () => {
               </div>
             )}
 
+            <div className="flex justify-center space-x-3 mb-6">
+              {[0, 1, 2, 3].map((i) => (
+                <div
+                  key={i}
+                  className={`w-16 h-18 border-3 rounded-xl flex items-center justify-center text-3xl font-bold transition-all ${
+                    i < input.length 
+                      ? 'border-indigo-500 bg-indigo-100 text-indigo-700 shadow-md' 
+                      : i === input.length && loading
+                        ? 'border-emerald-500 bg-emerald-100 animate-pulse'
+                        : 'border-gray-300 bg-white text-gray-400 shadow-sm'
+                  }`}
+                >
+                  {input[i] || (i === input.length ? '_' : '')}
+                </div>
+              ))}
+            </div>
+            
+            <p className="text-center text-sm text-gray-500 mb-6">
+              Presiona las teclas numéricas del teclado para ingresar los 4 dígitos
+            </p>
+
             <input
+              ref={inputRef}
               type="text"
               value={input}
-              onChange={(e) => setInput(e.target.value.slice(-4))}
+              onChange={(e) => setInput(e.target.value.replace(/\D/g, '').slice(0, 4))}
               className="sr-only"
               autoFocus
               maxLength={4}
               pattern="[0-9]{4}"
             />
 
-            <div className="flex justify-center space-x-3 mb-8">
-              {[0, 1, 2, 3].map((i) => (
-                <div
-                  key={i}
-                  className={`w-14 h-16 border-2 rounded-xl flex items-center justify-center text-2xl font-bold transition-all ${
-                    i < input.length ? 'border-indigo-500 bg-indigo-50 text-indigo-600' : 'border-gray-200 text-gray-400'
-                  }`}
-                >
-                  {input[i] || ''}
-                </div>
-              ))}
-            </div>
-
             {input.length === 4 && (
-              <button
-                onClick={verificar}
-                disabled={loading}
-                className="w-full px-6 py-4 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 disabled:opacity-50 transition-all text-lg"
-              >
-                {loading ? 'Verificando...' : 'Verificar'}
-              </button>
+              <div className="flex space-x-3">
+                <button
+                  onClick={() => { setInput(''); setResultado(null); setError(''); }}
+                  disabled={loading}
+                  className="flex-1 px-4 py-3 bg-gray-200 text-gray-700 font-semibold rounded-xl hover:bg-gray-300 disabled:opacity-50 transition-all"
+                >
+                  <HiArrowLeft className="h-5 w-5 inline mr-1" />
+                  Limpiar
+                </button>
+                <button
+                  onClick={() => verificar()}
+                  disabled={loading}
+                  className="flex-1 px-6 py-3 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 disabled:opacity-50 transition-all text-lg"
+                >
+                  {loading ? 'Verificando...' : 'Verificar'}
+                </button>
+              </div>
             )}
           </div>
         ) : (
@@ -179,6 +194,12 @@ const Verificar = () => {
                 <h2 className="text-xl font-semibold text-gray-900 mb-2">
                   {resultado.mensaje}
                 </h2>
+                <button
+                  onClick={() => reiniciar()}
+                  className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+                >
+                  Intentar otro código
+                </button>
               </div>
             ) : resultado.tipo === 'no_encontrado' || resultado.tipo === 'multiple' ? (
               <div className="p-8 bg-white rounded-2xl shadow-lg">
@@ -200,6 +221,12 @@ const Verificar = () => {
                     ))}
                   </div>
                 )}
+                <button
+                  onClick={() => reiniciar()}
+                  className="mt-4 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
+                >
+                  Intentar otro código
+                </button>
               </div>
             ) : (
               <div className={`p-8 rounded-2xl shadow-lg ${isRegistrado ? 'bg-indigo-50' : 'bg-blue-50'}`}>
@@ -261,6 +288,8 @@ const Verificar = () => {
           </div>
         )}
       </main>
+      
+      <Footer />
     </div>
   );
 };

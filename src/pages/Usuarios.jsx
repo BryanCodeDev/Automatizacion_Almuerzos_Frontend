@@ -74,7 +74,7 @@ const Usuarios = () => {
                 Administre los usuarios y sus permisos
               </p>
             </div>
-            <div className="flex-shrink-0">
+            <div className="shrink-0">
               <button
                 onClick={() => navigate('/usuarios/crear')}
                 className="px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"

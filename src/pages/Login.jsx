@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -198,6 +198,15 @@ const Login = () => {
             ¿Sin acceso?{' '}
             <span className="text-emerald-600 font-medium">Contacte al administrador del sistema</span>
           </p>
+
+          <div className="mt-6 text-center">
+            <Link 
+              to="/verificar" 
+              className="inline-flex items-center text-sm text-slate-600 hover:text-emerald-600 transition-colors"
+            >
+              ← Volver a Verificar
+            </Link>
+          </div>
         </div>
       </div>
     </div>

@@ -41,14 +41,10 @@ function App() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
-      <Route path="/verificar" element={<Verificar />} /> {/* Ruta pública */}
+      <Route path="/verificar" element={<Verificar />} />
       <Route 
         path="/" 
-        element={
-          <RequireAuth>
-            <Navigate to="/dashboard" replace />
-          </RequireAuth>
-        }
+        element={<Navigate to="/verificar" replace />}
       />
       <Route 
         path="/dashboard" 
