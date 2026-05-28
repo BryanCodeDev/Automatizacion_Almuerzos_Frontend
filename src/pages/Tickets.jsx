@@ -160,8 +160,17 @@ const Tickets = () => {
               {tickets.map((ticket) => (
                 <div key={ticket.id} className="bg-white rounded-lg shadow p-4 flex flex-col">
                   <div className="flex-1 text-center">
-                    <div className="w-32 h-32 mx-auto mb-3 bg-gray-100 flex items-center justify-center rounded-lg overflow-hidden">
-                      <div className="text-indigo-600">
+                    <div className="w-32 h-24 mx-auto mb-3 bg-gray-100 flex items-center justify-center rounded-lg overflow-hidden">
+                      <img
+                        src={`/api/tickets/${ticket.ticket_codigo}/download`}
+                        alt={`Ticket ${ticket.ticket_codigo}`}
+                        className="max-w-full max-h-full object-contain"
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                          e.target.nextSibling.style.display = 'flex';
+                        }}
+                      />
+                      <div className="hidden w-full h-full bg-indigo-50 items-center justify-center">
                         <svg className="w-16 h-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 4h10M7 8h10M7 12h10M7 16h10M3 4h2m2 0h2m2 0h2m2 0h2m2 0h2m2 0h2M3 8h2m2 0h2m2 0h2m2 0h2m2 0h2m2 0h2M3 12h2m2 0h2m2 0h2m2 0h2m2 0h2m2 0h2M3 16h2m2 0h2m2 0h2m2 0h2m2 0h2m2 0h2z" />
                         </svg>
@@ -221,17 +230,15 @@ const Tickets = () => {
             </button>
 
             <div className="text-center">
-              {previewImage ? (
-                <img
-                  src={previewImage}
-                  alt={`Ticket ${selectedTicket.ticket_codigo}`}
-                  className="w-64 h-64 mx-auto mb-4"
-                />
-              ) : (
-                <div className="w-64 h-64 mx-auto mb-4 bg-gray-100 flex items-center justify-center">
-                  <span className="text-gray-400">Cargando ticket...</span>
+              <div className="w-72 h-40 mx-auto mb-4 bg-gray-50 border border-gray-200 rounded-lg p-3 text-left">
+                <div className="text-xs space-y-1">
+                  <p><span className="font-bold text-indigo-600">ACCESO:</span> AUTORIZADO</p>
+                  <p><span className="font-bold">NOMBRE:</span> {selectedTicket.empleado?.nombre_completo || 'N/A'}</p>
+                  <p><span className="font-bold">CC:</span> {selectedTicket.empleado?.cedula || 'N/A'}</p>
+                  <p><span className="font-bold">FECHA:</span> {new Date().toLocaleDateString('es-CO')} - {new Date().toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' })}</p>
+                  <p><span className="font-bold">CÓDIGO:</span> {selectedTicket.ticket_codigo}</p>
                 </div>
-              )}
+              </div>
 
               <h2 className="text-lg font-bold text-gray-900">{selectedTicket.empleado?.nombre_completo || 'Empleado no encontrado'}</h2>
               <p className="text-sm text-gray-500">{selectedTicket.empleado?.cargo || '-'}</p>

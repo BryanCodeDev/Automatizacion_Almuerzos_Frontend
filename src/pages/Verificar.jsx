@@ -226,7 +226,7 @@ const Verificar = () => {
                   </button>
                 )}
 
-                {isRegistrado && resultado.ticket_codigo && (
+                {isRegistrado && (
                   <div className="mt-4 flex space-x-3">
                     <button
                       onClick={() => reiniciar()}
@@ -234,13 +234,15 @@ const Verificar = () => {
                     >
                       Digitar otro usuario
                     </button>
-                    <button
-                      onClick={() => descargarTicket(resultado.ticket_codigo)}
-                      className="flex-1 px-4 py-3 bg-indigo-600 text-white font-medium rounded-xl hover:bg-indigo-700 flex items-center justify-center"
-                    >
-                      <HiDownload className="h-4 w-4 mr-2" />
-                      Descargar ticket
-                    </button>
+                    {(resultado.registro?.ticket_codigo || resultado.ticket_codigo) && (
+                      <button
+                        onClick={() => descargarTicket(resultado.registro?.ticket_codigo || resultado.ticket_codigo)}
+                        className="flex-1 px-4 py-3 bg-indigo-600 text-white font-medium rounded-xl hover:bg-indigo-700 flex items-center justify-center"
+                      >
+                        <HiDownload className="h-4 w-4 mr-2" />
+                        Descargar ticket
+                      </button>
+                    )}
                   </div>
                 )}
               </div>
