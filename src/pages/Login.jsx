@@ -91,7 +91,7 @@ const Login = () => {
       </div>
 
       {/* Panel derecho — formulario */}
-      <div className="flex-1 flex items-center justify-center px-6 py-12">
+      <div className="flex-1 flex items-center justify-center px-6 py-12 bg-gradient-to-br from-indigo-50 via-white to-purple-50">
         <div className="w-full max-w-md">
 
           {/* Logo mobile */}
@@ -194,15 +194,15 @@ const Login = () => {
             </button>
           </form>
 
-          <p className="mt-8 text-center text-sm text-slate-500">
+          <p className="mt-8 text-center text-sm text-gray-500">
             ¿Sin acceso?{' '}
-            <span className="text-emerald-600 font-medium">Contacte al administrador del sistema</span>
+            <span className="text-indigo-600 font-medium">Contacte al administrador del sistema</span>
           </p>
 
           <div className="mt-6 text-center">
             <Link 
               to="/verificar" 
-              className="inline-flex items-center text-sm text-slate-600 hover:text-emerald-600 transition-colors"
+              className="inline-flex items-center text-sm text-gray-600 hover:text-indigo-600 transition-colors"
             >
               ← Volver a Verificar
             </Link>
