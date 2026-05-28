@@ -42,7 +42,7 @@ const EmployeeSearch = ({ value, onChange }) => {
   return (
     <div className="relative">
       <div className="flex items-center space-x-3">
-        <div className="flex-shrink-0">
+        <div className="shrink-0">
           <svg className="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
             <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l1.217.707a1 1 0 00-.289 1.07l-.895 2.516a1 1 0 001.207.895l2.516-.895a1 1 0 001.07-.289L17.523 12H19a1 1 0 000-2h-2.476l-.293-.293a1 1 0 00-1.414-1.414l-.879-.88A5.998 5.998 0 012 8zm12 4.5a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
           </svg>
@@ -54,7 +54,7 @@ const EmployeeSearch = ({ value, onChange }) => {
             placeholder="Buscar empleado por nombre o cédula..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="block w-full pl-10 pr-4 py-2 rounded-md border-0 bg-gray-50 px-3 py-2 text-base placeholder-gray-400 focus:outline-none focus:ring-2 focus-ring-indigo-500 sm:text-sm"
+            className="block w-full pl-10 pr-4 py-2 rounded-md border-0 bg-gray-50 px-3 text-base placeholder-gray-400 focus:outline-none focus:ring-2 focus-ring-indigo-500 sm:text-sm"
           />
         </div>
       </div>

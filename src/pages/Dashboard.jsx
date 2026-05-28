@@ -146,7 +146,7 @@ const Dashboard = () => {
                       <dd className="text-3xl font-extrabold text-gray-900">{stats.registradosHoy}</dd>
                     </dl>
                   </div>
-                  <div className="flex-shrink-0">
+                  <div className="shrink-0">
                     <div className="flex h-10 w-10 items-center justify-center rounded-md bg-indigo-100">
                       <HiOutlineUserGroup className="h-5 w-5 text-indigo-600" />
                     </div>
@@ -166,7 +166,7 @@ const Dashboard = () => {
                       <dd className="text-3xl font-extrabold text-gray-900">{stats.totalEmpleados}</dd>
                     </dl>
                   </div>
-                  <div className="flex-shrink-0">
+                  <div className="shrink-0">
                     <div className="flex h-10 w-10 items-center justify-center rounded-md bg-indigo-100">
                       <HiOutlineDocumentText className="h-5 w-5 text-indigo-600" />
                     </div>
@@ -186,7 +186,7 @@ const Dashboard = () => {
                       <dd className="text-3xl font-extrabold text-gray-900">{stats.porcentaje}%</dd>
                     </dl>
                   </div>
-                  <div className="flex-shrink-0">
+                  <div className="shrink-0">
                     <div className="flex h-10 w-10 items-center justify-center rounded-md bg-indigo-100">
                       <HiOutlineQrcode className="h-5 w-5 text-indigo-600" />
                     </div>
@@ -204,7 +204,7 @@ const Dashboard = () => {
               {ultimosEscaneos.map((escaneo) => (
                 <div key={escaneo.id} className="border-b border-gray-200 pb-6">
                   <div className="flex items-start">
-                    <div className="flex-shrink-0">
+                    <div className="shrink-0">
                       <div className="flex h-10 w-10 items-center justify-center rounded-md bg-green-100">
                         <svg className="h-5 w-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />

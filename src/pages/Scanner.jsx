@@ -131,7 +131,7 @@ const Scanner = () => {
                       : 'bg-red-50 border border-red-200'}`}
                 >
                   <div className="flex items-start">
-                    <div className="flex-shrink-0">
+                    <div className="shrink-0">
                       {feedback.type === 'success' && (
                         <HiOutlineCheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
                       )}
@@ -220,7 +220,7 @@ const Scanner = () => {
             <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
               <div className="p-6">
                 <div className="flex items-center space-x-3">
-                  <div className="flex-shrink-0">
+                  <div className="shrink-0">
                     <svg className="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
                       <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
                       <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
@@ -249,7 +249,7 @@ const Scanner = () => {
                       }
                     }}
                     disabled={!manualInput.trim()}
-                    className="flex-shrink-0 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none"
+                    className="shrink-0 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none"
                   >
                     Escanear
                   </button>
