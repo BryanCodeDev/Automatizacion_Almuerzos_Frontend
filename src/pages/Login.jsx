@@ -30,9 +30,9 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex bg-slate-50">
+    <div className="min-h-screen flex bg-gradient-to-br from-indigo-50 via-white to-purple-50">
       {/* Panel izquierdo decorativo */}
-      <div className="hidden lg:flex lg:w-1/2 bg-slate-900 relative overflow-hidden flex-col justify-between p-12">
+      <div className="hidden lg:flex lg:w-1/2 bg-gray-900 relative overflow-hidden flex-col justify-between p-12">
         {/* Patrón de fondo */}
         <div className="absolute inset-0 opacity-5">
           <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
@@ -45,12 +45,12 @@ const Login = () => {
           </svg>
         </div>
         {/* Círculo decorativo */}
-        <div className="absolute -bottom-32 -left-32 w-96 h-96 bg-emerald-500 rounded-full opacity-10"></div>
-        <div className="absolute -top-20 -right-20 w-64 h-64 bg-indigo-500 rounded-full opacity-10"></div>
+        <div className="absolute -bottom-32 -left-32 w-96 h-96 bg-indigo-500 rounded-full opacity-10"></div>
+        <div className="absolute -top-20 -right-20 w-64 h-64 bg-purple-500 rounded-full opacity-10"></div>
 
         <div className="relative z-10">
           <div className="flex items-center space-x-3 mb-2">
-            <div className="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center">
+            <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center">
               <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
               </svg>
@@ -63,7 +63,7 @@ const Login = () => {
           <div>
             <h1 className="text-4xl font-bold text-white leading-tight">
               Gestión inteligente<br/>
-              <span className="text-emerald-400">de almuerzos</span><br/>
+              <span className="text-indigo-400">de almuerzos</span><br/>
               corporativos
             </h1>
             <p className="mt-4 text-slate-400 text-lg leading-relaxed">
@@ -96,17 +96,17 @@ const Login = () => {
 
           {/* Logo mobile */}
           <div className="lg:hidden flex items-center space-x-3 mb-10">
-            <div className="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center">
+            <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center">
               <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
               </svg>
             </div>
-            <span className="font-semibold text-slate-900 text-lg">AlmuerzosApp</span>
+            <span className="font-semibold text-gray-900 text-lg">AlmuerzosApp</span>
           </div>
 
           <div className="mb-8">
-            <h2 className="text-3xl font-bold text-slate-900 tracking-tight">Bienvenido</h2>
-            <p className="mt-2 text-slate-500">Inicie sesión para acceder al panel de control</p>
+            <h2 className="text-3xl font-bold text-gray-900 tracking-tight">Bienvenido</h2>
+            <p className="mt-2 text-gray-600">Inicie sesión para acceder al panel de control</p>
           </div>
 
           {error && (
@@ -120,7 +120,7 @@ const Login = () => {
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
                 Correo electrónico
               </label>
               <input
@@ -129,12 +129,12 @@ const Login = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="usuario@empresa.com"
-                className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all text-sm"
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-sm"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
                 Contraseña
               </label>
               <div className="relative">
@@ -144,12 +144,12 @@ const Login = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all text-sm pr-12"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-sm pr-12"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                 >
                   {showPassword ? (
                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -167,10 +167,10 @@ const Login = () => {
 
             <div className="flex items-center justify-between pt-1">
               <label className="flex items-center space-x-2 cursor-pointer">
-                <input type="checkbox" className="w-4 h-4 rounded border-slate-300 text-emerald-500 focus:ring-emerald-500" />
-                <span className="text-sm text-slate-600">Recordarme</span>
+                <input type="checkbox" className="w-4 h-4 rounded border-gray-300 text-indigo-500 focus:ring-indigo-500" />
+                <span className="text-sm text-gray-600">Recordarme</span>
               </label>
-              <button type="button" className="text-sm text-emerald-600 hover:text-emerald-700 font-medium">
+              <button type="button" className="text-sm text-indigo-600 hover:text-indigo-700 font-medium">
                 ¿Olvidó su contraseña?
               </button>
             </div>
@@ -178,7 +178,7 @@ const Login = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3.5 px-4 bg-slate-900 hover:bg-slate-800 text-white font-semibold rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 mt-2"
+              className="w-full py-3.5 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 mt-2"
             >
               {loading ? (
                 <>
