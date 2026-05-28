@@ -46,15 +46,15 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="mt-8 pt-6 border-t border-gray-700 flex flex-col sm:flex-row justify-between items-center">
+<div className="mt-8 pt-6 border-t border-gray-700 flex flex-col sm:flex-row justify-between items-center">
           <div className="flex items-center space-x-1 text-gray-400 text-sm">
-            <span>© 2026 DuvyClass ·{new Date().getFullYear()} AlmuerzosApp.</span>
-            <span>Desarrollado por Bryan Muñoz</span>
+            <span>© {new Date().getFullYear()} AlmuerzosApp.</span>
+            <span>Hecho con</span>
             <HiHeart className="h-4 w-4 text-red-500" />
             <span>en Colombia</span>
           </div>
           <div className="mt-4 sm:mt-0 text-gray-400 text-xs">
-            ·Todos los derechos reservados.
+            Todos los derechos reservados
           </div>
         </div>
       </div>
