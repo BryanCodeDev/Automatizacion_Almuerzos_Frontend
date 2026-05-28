@@ -186,14 +186,14 @@ const Verificar = () => {
           </div>
         ) : (
           <div className="w-full max-w-sm text-center">
-            {resultado.tipo === 'no_habil' ? (
-              <div className="p-6 bg-white rounded-lg shadow-md">
-                <HiOutlineCalendar className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                <h2 className="text-xl font-semibold text-gray-900 mb-2">
-                  {resultado.mensaje}
-                </h2>
-              </div>
-            ) : resultado.tipo === 'no_encontrado' || resultado.tipo === 'multiple' ? (
+{resultado.tipo === 'no_habil' || resultado.tipo === 'fuera_horario' ? (
+               <div className="p-6 bg-white rounded-lg shadow-md">
+                 <HiOutlineCalendar className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+                 <h2 className="text-xl font-semibold text-gray-900 mb-2">
+                   {resultado.mensaje}
+                 </h2>
+               </div>
+             ) : resultado.tipo === 'no_encontrado' || resultado.tipo === 'multiple' ? (
               <div className="p-6 bg-white rounded-lg shadow-md">
                 <HiOutlineX className="h-16 w-16 text-red-600 mx-auto mb-4" />
                 <h2 className="text-xl font-semibold text-gray-900 mb-2">
