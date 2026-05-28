@@ -204,7 +204,7 @@ const Scanner = () => {
                       )}
                       {feedback.type === 'error' && (
                         <div className="text-red-600">
-                          <HiOutlineXMark className="h-12 w-12" />
+                          <HiX className="h-12 w-12" />
                           <p className="mt-2 text-base font-medium">Intente nuevamente</p>
                         </div>
                       )}

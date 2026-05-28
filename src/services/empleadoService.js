@@ -7,6 +7,7 @@ const empleadoService = {
   update: (id, data) => api.put(`/empleados/${id}`, data),
   remove: (id) => api.delete(`/empleados/${id}`),
   getQR: (id) => api.get(`/empleados/${id}/qr`),
+  descargarQR: (id) => api.get(`/empleados/${id}/qr-download`, { responseType: 'blob' }),
   exportar: () => api.get('/empleados/exportar', { responseType: 'blob' })
 };
 

@@ -10,6 +10,9 @@ import Usuarios from './pages/Usuarios';
 import UsuarioForm from './components/UsuarioForm';
 import EmpleadoForm from './components/EmpleadoForm';
 import Sidebar from './components/Sidebar';
+import QREmpleados from './pages/QREmpleados';
+import Verificar from './pages/Verificar';
+import VerificadorInterno from './pages/VerificadorInterno';
 import { useAuth } from './context/AuthContext';
 
 const RequireAuth = ({ children, role }) => {
@@ -37,6 +40,7 @@ function App() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
+      <Route path="/verificar" element={<Verificar />} /> {/* Ruta pública */}
       <Route 
         path="/" 
         element={
@@ -122,6 +126,22 @@ function App() {
         element={
           <RequireAuth role="admin">
             <Usuarios />
+          </RequireAuth>
+        }
+      />
+      <Route 
+        path="/qr-empleados" 
+        element={
+          <RequireAuth role="admin">
+            <QREmpleados />
+          </RequireAuth>
+        }
+      />
+      <Route 
+        path="/verificador" 
+        element={
+          <RequireAuth>
+            <VerificadorInterno />
           </RequireAuth>
         }
       />
