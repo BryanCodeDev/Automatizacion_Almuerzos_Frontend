@@ -30,7 +30,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+    <div className="min-h-screen flex bg-linear-to-br from-indigo-50 via-white to-purple-50">
       {/* Panel izquierdo decorativo */}
       <div className="hidden lg:flex lg:w-1/2 bg-gray-900 relative overflow-hidden flex-col justify-between p-12">
         {/* Patrón de fondo */}
@@ -91,7 +91,7 @@ const Login = () => {
       </div>
 
       {/* Panel derecho — formulario */}
-      <div className="flex-1 flex items-center justify-center px-6 py-12 bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+      <div className="flex-1 flex items-center justify-center px-6 py-12 bg-linear-to-br from-indigo-50 via-white to-purple-50">
         <div className="w-full max-w-md">
 
           {/* Logo mobile */}
