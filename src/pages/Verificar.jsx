@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import verificarService from '../services/verificarService';
 import { HiOutlineX, HiOutlineCheckCircle, HiOutlineCalendar, HiOutlineUser, HiDownload, HiArrowLeft } from 'react-icons/hi';
 import Navbar from '../components/Navbar';
@@ -15,7 +15,6 @@ const Verificar = () => {
 
   useEffect(() => {
     const handleKeyDown = (e) => {
-      // Bloquear si está cargando o si ya tiene resultado registrado
       if (loading || isRegistrado) return;
       
       if (e.key >= '0' && e.key <= '9') {
@@ -35,10 +34,61 @@ const Verificar = () => {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [loading, resultado, isRegistrado]);
+  }, [loading, resultado]);
+
+  const verificar = async (codigo = input) => {
+    if (codigo.length !== 4) return;
+    
+    setLoading(true);
+    setError('');
+    
+    try {
+      const response = await verificarService.verificarPorCedula(codigo);
+      setResultado(response.data);
+    } catch (err) {
+      setError('Error al verificar. Intente nuevamente.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const registrarAlmuerzo = async (empleado_id = null) => {
+    setLoading(true);
+    
+    try {
+      const response = await verificarService.registrar(empleado_id, input);
+      setResultado({ ...response.data, justRegistered: true });
+    } catch (err) {
+      setError('Error al registrar. Intente nuevamente.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const reiniciar = () => {
+    setInput('');
+    setResultado(null);
+    setError('');
+  };
+
+  const descargarTicket = async (ticket_codigo) => {
+    try {
+      const response = await verificarService.descargarTicket(ticket_codigo);
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `ticket_${ticket_codigo}.png`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(() => window.URL.revokeObjectURL(url), 100);
+    } catch (error) {
+      console.error('Error downloading ticket:', error);
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex flex-col">
+    <div className="min-h-screen bg-linear-to-br from-indigo-50 via-white to-purple-50 flex flex-col">
       <Navbar />
 
       <main className="flex-1 flex items-center justify-center px-4 py-8">
@@ -176,23 +226,23 @@ const Verificar = () => {
                   </button>
                 )}
 
-{isRegistrado && resultado.ticket_codigo && (
-                   <div className="mt-4 flex space-x-3">
-                     <button
-                       onClick={() => reiniciar()}
-                       className="flex-1 px-4 py-3 bg-gray-600 text-white font-medium rounded-xl hover:bg-gray-700"
-                     >
-                       Digitar otro usuario
-                     </button>
-                     <button
-                       onClick={() => descargarTicket(resultado.ticket_codigo)}
-                       className="flex-1 px-4 py-3 bg-indigo-600 text-white font-medium rounded-xl hover:bg-indigo-700 flex items-center justify-center"
-                     >
-                       <HiDownload className="h-4 w-4 mr-2" />
-                       Descargar ticket
-                     </button>
-                   </div>
-                 )}
+                {isRegistrado && resultado.ticket_codigo && (
+                  <div className="mt-4 flex space-x-3">
+                    <button
+                      onClick={() => reiniciar()}
+                      className="flex-1 px-4 py-3 bg-gray-600 text-white font-medium rounded-xl hover:bg-gray-700"
+                    >
+                      Digitar otro usuario
+                    </button>
+                    <button
+                      onClick={() => descargarTicket(resultado.ticket_codigo)}
+                      className="flex-1 px-4 py-3 bg-indigo-600 text-white font-medium rounded-xl hover:bg-indigo-700 flex items-center justify-center"
+                    >
+                      <HiDownload className="h-4 w-4 mr-2" />
+                      Descargar ticket
+                    </button>
+                  </div>
+                )}
               </div>
             )}
           </div>
