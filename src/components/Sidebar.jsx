@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { HiOutlineHome, HiOutlineUserGroup, HiOutlineQrcode, HiOutlineChartBar, HiOutlineUsers, HiOutlineLogout, HiOutlineClipboardList, HiOutlineX, HiOutlineViewGrid } from 'react-icons/hi';
+import { HiOutlineHome, HiOutlineUserGroup, HiOutlineQrcode, HiOutlineChartBar, HiOutlineUsers, HiOutlineLogout, HiOutlineClipboardList, HiOutlineX, HiOutlineViewGrid, HiOutlineTicket } from 'react-icons/hi';
 
 const Sidebar = () => {
   const { user, logout } = useAuth();
@@ -23,6 +23,7 @@ const Sidebar = () => {
     { to: '/empleados', icon: HiOutlineUserGroup, label: 'Empleados', roles: ['admin', 'operador'] },
     { to: '/scanner', icon: HiOutlineQrcode, label: 'Escáner', roles: ['operador'] },
     { to: '/reportes', icon: HiOutlineChartBar, label: 'Reportes', roles: ['admin', 'operador'] },
+    { to: '/tickets', icon: HiOutlineTicket, label: 'Tickets', roles: ['admin', 'operador'] },
     { to: '/usuarios', icon: HiOutlineUsers, label: 'Usuarios', roles: ['admin'] },
     { to: '/qr-empleados', icon: HiOutlineViewGrid, label: 'QR Empleados', roles: ['admin'] },
     { to: '/verificar', icon: HiOutlineQrcode, label: 'Verificar (Público)', roles: ['admin', 'operador'] },

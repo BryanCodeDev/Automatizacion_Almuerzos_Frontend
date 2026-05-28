@@ -1,27 +1,22 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useMemo } from 'react';
 import verificarService from '../services/verificarService';
 import { HiOutlineX, HiOutlineCheckCircle, HiOutlineCalendar, HiOutlineUser, HiDownload, HiArrowLeft } from 'react-icons/hi';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
 const Verificar = () => {
-  const navigate = useNavigate();
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [resultado, setResultado] = useState(null);
   const [error, setError] = useState('');
-  const inputRef = useRef(null);
+
+  const isRegistrado = resultado?.tipo === 'registrado' || resultado?.justRegistered;
+  const isNoRegistrado = resultado?.tipo === 'no_registrado';
 
   useEffect(() => {
-    const focusInput = () => {
-      inputRef.current?.focus();
-    };
-    
-    focusInput();
-    
     const handleKeyDown = (e) => {
-      if (loading) return;
+      // Bloquear si está cargando o si ya tiene resultado registrado
+      if (loading || isRegistrado) return;
       
       if (e.key >= '0' && e.key <= '9') {
         setInput(prev => {
@@ -32,84 +27,15 @@ const Verificar = () => {
           return newInput;
         });
       } else if (e.key === 'Backspace') {
-        setInput(prev => prev.slice(0, -1));
-        if (resultado) {
-          setResultado(null);
-          setError('');
+        if (!resultado) {
+          setInput(prev => prev.slice(0, -1));
         }
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [loading, resultado]);
-
-  const verificar = async (codigo = input) => {
-    if (codigo.length !== 4) return;
-    
-    setLoading(true);
-    setError('');
-    
-    try {
-      const response = await verificarService.verificarPorCedula(codigo);
-      setResultado(response.data);
-    } catch (err) {
-      setError('Error al verificar. Intente nuevamente.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const registrarAlmuerzo = async (empleado_id = null) => {
-    setLoading(true);
-    
-    try {
-      const response = await verificarService.registrar(empleado_id, input);
-      setResultado({ ...response.data, justRegistered: true });
-    } catch (err) {
-      setError('Error al registrar. Intente nuevamente.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const reiniciar = () => {
-    setInput('');
-    setResultado(null);
-    setError('');
-    focusInput();
-  };
-
-  const descargarTicket = async (ticket_codigo) => {
-    try {
-      const response = await verificarService.descargarTicket(ticket_codigo);
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', `ticket_${ticket_codigo}.png`);
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      setTimeout(() => window.URL.revokeObjectURL(url), 100);
-    } catch (error) {
-      console.error('Error downloading ticket:', error);
-    }
-  };
-
-  const imprimirTicket = async (ticket_codigo) => {
-    try {
-      const response = await verificarService.descargarTicket(ticket_codigo);
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const printWindow = window.open(url, '_blank');
-      printWindow?.focus();
-      setTimeout(() => window.URL.revokeObjectURL(url), 100);
-    } catch (error) {
-      console.error('Error printing ticket:', error);
-    }
-  };
-
-  const isRegistrado = resultado?.tipo === 'registrado' || resultado?.justRegistered;
-  const isNoRegistrado = resultado?.tipo === 'no_registrado';
+  }, [loading, resultado, isRegistrado]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex flex-col">
@@ -155,21 +81,10 @@ const Verificar = () => {
               Presiona las teclas numéricas del teclado para ingresar los 4 dígitos
             </p>
 
-            <input
-              ref={inputRef}
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value.replace(/\D/g, '').slice(0, 4))}
-              className="sr-only"
-              autoFocus
-              maxLength={4}
-              pattern="[0-9]{4}"
-            />
-
             {input.length === 4 && (
               <div className="flex space-x-3">
                 <button
-                  onClick={() => { setInput(''); setResultado(null); setError(''); }}
+                  onClick={() => { setInput(''); }}
                   disabled={loading}
                   className="flex-1 px-4 py-3 bg-gray-200 text-gray-700 font-semibold rounded-xl hover:bg-gray-300 disabled:opacity-50 transition-all"
                 >
@@ -188,7 +103,7 @@ const Verificar = () => {
           </div>
         ) : (
           <div className="w-full max-w-sm text-center">
-            {resultado.tipo === 'no_habil' || resultado.tipo === 'fuera_horario' ? (
+            {resultado.tipo === 'no_habil' ? (
               <div className="p-8 bg-white rounded-2xl shadow-lg">
                 <HiOutlineCalendar className="h-16 w-16 text-gray-400 mx-auto mb-4" />
                 <h2 className="text-xl font-semibold text-gray-900 mb-2">
@@ -242,17 +157,12 @@ const Verificar = () => {
                   {resultado.empleado.area && (
                     <p><span className="font-medium text-gray-700">Área:</span> {resultado.empleado.area}</p>
                   )}
-                  {resultado.registro?.hora && (
-                    <p>
-                      <span className="font-medium text-gray-700">Hora:</span>{' '}
-                      {new Date(resultado.registro.hora).toLocaleTimeString('es-CO', {
-                        hour: '2-digit',
-                        minute: '2-digit'
-                      })}
-                    </p>
-                  )}
-                  {resultado.ticket_codigo && (
-                    <p><span className="font-medium text-gray-700">Código:</span> {resultado.ticket_codigo}</p>
+                  <p><span className="font-medium text-gray-700">Hora de verificación:</span> {new Date().toLocaleTimeString('es-CO', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  })}</p>
+                  {resultado.empleado.cedula && (
+                    <p><span className="font-medium text-gray-700">Cédula:</span> {resultado.empleado.cedula}</p>
                   )}
                 </div>
 
@@ -266,23 +176,23 @@ const Verificar = () => {
                   </button>
                 )}
 
-                {isRegistrado && resultado.ticket_codigo && (
-                  <div className="mt-6 flex space-x-3">
-                    <button
-                      onClick={() => descargarTicket(resultado.ticket_codigo)}
-                      className="flex-1 px-4 py-3 bg-indigo-600 text-white font-medium rounded-xl hover:bg-indigo-700 flex items-center justify-center"
-                    >
-                      <HiDownload className="h-4 w-4 mr-2" />
-                      Descargar
-                    </button>
-                    <button
-                      onClick={() => imprimirTicket(resultado.ticket_codigo)}
-                      className="flex-1 px-4 py-3 bg-gray-600 text-white font-medium rounded-xl hover:bg-gray-700"
-                    >
-                      Imprimir
-                    </button>
-                  </div>
-                )}
+{isRegistrado && resultado.ticket_codigo && (
+                   <div className="mt-4 flex space-x-3">
+                     <button
+                       onClick={() => reiniciar()}
+                       className="flex-1 px-4 py-3 bg-gray-600 text-white font-medium rounded-xl hover:bg-gray-700"
+                     >
+                       Digitar otro usuario
+                     </button>
+                     <button
+                       onClick={() => descargarTicket(resultado.ticket_codigo)}
+                       className="flex-1 px-4 py-3 bg-indigo-600 text-white font-medium rounded-xl hover:bg-indigo-700 flex items-center justify-center"
+                     >
+                       <HiDownload className="h-4 w-4 mr-2" />
+                       Descargar ticket
+                     </button>
+                   </div>
+                 )}
               </div>
             )}
           </div>

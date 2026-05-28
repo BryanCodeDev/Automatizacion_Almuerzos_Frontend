@@ -13,6 +13,7 @@ import Sidebar from './components/Sidebar';
 import QREmpleados from './pages/QREmpleados';
 import Verificar from './pages/Verificar';
 import VerificadorInterno from './pages/VerificadorInterno';
+import Tickets from './pages/Tickets';
 import { useAuth } from './context/AuthContext';
 
 const RequireAuth = ({ children, role }) => {
@@ -139,6 +140,14 @@ function App() {
         element={
           <RequireAuth>
             <VerificadorInterno />
+          </RequireAuth>
+        }
+      />
+      <Route 
+        path="/tickets" 
+        element={
+          <RequireAuth>
+            <Tickets />
           </RequireAuth>
         }
       />
