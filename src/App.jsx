@@ -22,7 +22,8 @@ const RequireAuth = ({ children, role }) => {
   
   if (!user) return <Navigate to="/login" replace />;
   
-  if (role && user.rol !== role) {
+  // Admin has access to everything
+  if (role && user.rol !== role && user.rol !== 'admin') {
     return <div>No tiene permiso para acceder a esta página</div>;
   }
   

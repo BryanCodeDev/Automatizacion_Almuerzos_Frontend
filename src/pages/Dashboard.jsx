@@ -130,7 +130,7 @@ const Dashboard = () => {
           </div>
           <div className="h-3 bg-slate-100 rounded-full overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-emerald-400 to-emerald-600 rounded-full transition-all duration-700"
+              className="h-full bg-linear-to-r from-emerald-400 to-emerald-600 rounded-full transition-all duration-700"
               style={{ width: `${stats.porcentaje}%` }}
             />
           </div>
