@@ -43,14 +43,14 @@ const Reportes = () => {
 
   return (
     <>
-      <header className="bg-white shadow-sm">
+      <header className="bg-white border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
             <div className="flex-1">
-              <h1 className="text-2xl font-bold text-gray-900">
+              <h1 className="text-2xl font-bold text-gray-900 tracking-tight">
                 Reportes y Estadísticas
               </h1>
-              <p className="mt-1 text-sm text-gray-600">
+              <p className="mt-1 text-sm text-gray-500">
                 Consulte y exporte reportes de almuerzos corporativos
               </p>
             </div>
@@ -146,33 +146,33 @@ const Reportes = () => {
               </>
             )}
 
-{activeTab === 'boleta' && (
-               <>
-                 <DateRangePicker
-                   value={dateRange}
-                   onChange={handleDateRangeChange}
-                   singleDate={true}
-                   label="Seleccione una fecha"
-                 />
-                 {dateRange.desde ? (
-                   <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                     <div className="p-6">
-                       <DailyBoleta fecha={dateRange.desde} />
-                     </div>
-                   </div>
-                 ) : (
-                   <div className="text-center py-12">
-                     <p className="text-gray-500">Seleccione una fecha para ver la boleta</p>
-                   </div>
-                 )}
-                 <ExportButton
-                   reporteType="boleta"
-                   params={{ fecha: dateRange.desde }}
-                   disabled={!dateRange.desde}
-                 />
-               </>
-             )}
-           </div>
+            {activeTab === 'boleta' && (
+              <>
+                <DateRangePicker
+                  value={dateRange}
+                  onChange={handleDateRangeChange}
+                  singleDate={true}
+                  label="Seleccione una fecha"
+                />
+                {dateRange.desde ? (
+                  <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div className="p-6">
+                      <DailyBoleta fecha={dateRange.desde} />
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-center py-12">
+                    <p className="text-gray-500">Seleccione una fecha para ver la boleta</p>
+                  </div>
+                )}
+                <ExportButton
+                  reporteType="boleta"
+                  params={{ fecha: dateRange.desde }}
+                  disabled={!dateRange.desde}
+                />
+              </>
+            )}
+          </div>
         </div>
       </main>
     </>

@@ -101,13 +101,13 @@ const Verificar = () => {
   const isNoRegistrado = resultado?.tipo === 'no_registrado';
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex flex-col">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       <header className="bg-white/80 backdrop-blur-sm shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-xl font-bold text-slate-900">Verificador de Almuerzo</h1>
+          <h1 className="text-xl font-bold text-gray-900">Verificador de Almuerzo</h1>
           <button
             onClick={() => navigate('/login')}
-            className="inline-flex items-center px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 transition-colors"
+            className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors"
           >
             <HiLogin className="h-4 w-4 mr-2" />
             Iniciar sesión
@@ -115,7 +115,7 @@ const Verificar = () => {
         </div>
       </header>
 
-      <div className="text-center py-4 text-sm text-slate-600 capitalize">
+      <div className="text-center py-4 text-sm text-gray-600 capitalize">
         {fechaActual}
       </div>
 
@@ -123,11 +123,11 @@ const Verificar = () => {
         {!resultado || input.length !== 4 ? (
           <div className="w-full max-w-sm">
             <div className="text-center mb-8">
-              <HiOutlineUser className="h-16 w-16 text-emerald-600 mx-auto mb-4" />
-              <h2 className="text-2xl font-bold text-slate-900 mb-2">
+              <HiOutlineUser className="h-16 w-16 text-indigo-600 mx-auto mb-4" />
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">
                 ¿Recibiste tu almuerzo hoy?
               </h2>
-              <p className="text-slate-500">
+              <p className="text-gray-500">
                 Ingresa los últimos 4 dígitos de tu cédula
               </p>
             </div>
@@ -153,7 +153,7 @@ const Verificar = () => {
                 <div
                   key={i}
                   className={`w-14 h-16 border-2 rounded-xl flex items-center justify-center text-2xl font-bold transition-all ${
-                    i < input.length ? 'border-emerald-500 bg-emerald-50 text-emerald-600' : 'border-slate-200 text-slate-400'
+                    i < input.length ? 'border-indigo-500 bg-indigo-50 text-indigo-600' : 'border-gray-200 text-gray-400'
                   }`}
                 >
                   {input[i] || ''}
@@ -165,7 +165,7 @@ const Verificar = () => {
               <button
                 onClick={verificar}
                 disabled={loading}
-                className="w-full px-6 py-4 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 disabled:opacity-50 transition-all text-lg"
+                className="w-full px-6 py-4 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 disabled:opacity-50 transition-all text-lg"
               >
                 {loading ? 'Verificando...' : 'Verificar'}
               </button>
@@ -175,15 +175,15 @@ const Verificar = () => {
           <div className="w-full max-w-sm text-center">
             {resultado.tipo === 'no_habil' || resultado.tipo === 'fuera_horario' ? (
               <div className="p-8 bg-white rounded-2xl shadow-lg">
-                <HiOutlineCalendar className="h-16 w-16 text-slate-400 mx-auto mb-4" />
-                <h2 className="text-xl font-semibold text-slate-900 mb-2">
+                <HiOutlineCalendar className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+                <h2 className="text-xl font-semibold text-gray-900 mb-2">
                   {resultado.mensaje}
                 </h2>
               </div>
             ) : resultado.tipo === 'no_encontrado' || resultado.tipo === 'multiple' ? (
               <div className="p-8 bg-white rounded-2xl shadow-lg">
                 <HiOutlineX className="h-16 w-16 text-red-600 mx-auto mb-4" />
-                <h2 className="text-xl font-semibold text-slate-900 mb-2">
+                <h2 className="text-xl font-semibold text-gray-900 mb-2">
                   {resultado.mensaje}
                 </h2>
                 {resultado.tipo === 'multiple' && (
@@ -193,31 +193,31 @@ const Verificar = () => {
                         key={emp.id}
                         onClick={() => registrarAlmuerzo(emp.id)}
                         disabled={loading}
-                        className="w-full p-4 bg-slate-50 rounded-xl text-left hover:bg-slate-100 transition-colors border border-slate-200"
+                        className="w-full p-4 bg-gray-50 rounded-xl text-left hover:bg-gray-100 transition-colors border border-gray-200"
                       >
-                        <span className="font-medium text-slate-800">{emp.nombre_completo}</span>
+                        <span className="font-medium text-gray-800">{emp.nombre_completo}</span>
                       </button>
                     ))}
                   </div>
                 )}
               </div>
             ) : (
-              <div className={`p-8 rounded-2xl shadow-lg ${isRegistrado ? 'bg-emerald-50' : 'bg-blue-50'}`}>
-                <HiOutlineCheckCircle className={`h-16 w-16 mx-auto mb-4 ${isRegistrado ? 'text-emerald-600' : 'text-blue-600'}`} />
-                <h2 className="text-xl font-semibold text-slate-900 mb-4">
+              <div className={`p-8 rounded-2xl shadow-lg ${isRegistrado ? 'bg-indigo-50' : 'bg-blue-50'}`}>
+                <HiOutlineCheckCircle className={`h-16 w-16 mx-auto mb-4 ${isRegistrado ? 'text-indigo-600' : 'text-blue-600'}`} />
+                <h2 className="text-xl font-semibold text-gray-900 mb-4">
                   {isRegistrado 
                     ? '¡Correcto! Puedes recibir tu almuerzo' 
                     : 'Aún no has recibido tu almuerzo. ¿Deseas registrarlo?'}
                 </h2>
                 
                 <div className="text-left space-y-3 bg-white p-4 rounded-xl">
-                  <p><span className="font-medium text-slate-700">Nombre:</span> {resultado.empleado.nombre_completo}</p>
+                  <p><span className="font-medium text-gray-700">Nombre:</span> {resultado.empleado.nombre_completo}</p>
                   {resultado.empleado.area && (
-                    <p><span className="font-medium text-slate-700">Área:</span> {resultado.empleado.area}</p>
+                    <p><span className="font-medium text-gray-700">Área:</span> {resultado.empleado.area}</p>
                   )}
                   {resultado.registro?.hora && (
                     <p>
-                      <span className="font-medium text-slate-700">Hora:</span>{' '}
+                      <span className="font-medium text-gray-700">Hora:</span>{' '}
                       {new Date(resultado.registro.hora).toLocaleTimeString('es-CO', {
                         hour: '2-digit',
                         minute: '2-digit'
@@ -225,7 +225,7 @@ const Verificar = () => {
                     </p>
                   )}
                   {resultado.ticket_codigo && (
-                    <p><span className="font-medium text-slate-700">Código:</span> {resultado.ticket_codigo}</p>
+                    <p><span className="font-medium text-gray-700">Código:</span> {resultado.ticket_codigo}</p>
                   )}
                 </div>
 
@@ -233,7 +233,7 @@ const Verificar = () => {
                   <button
                     onClick={() => registrarAlmuerzo()}
                     disabled={loading}
-                    className="mt-6 w-full px-6 py-3 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 disabled:opacity-50 transition-all"
+                    className="mt-6 w-full px-6 py-3 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 disabled:opacity-50 transition-all"
                   >
                     {loading ? 'Registrando...' : 'Recibir Almuerzo'}
                   </button>
@@ -250,7 +250,7 @@ const Verificar = () => {
                     </button>
                     <button
                       onClick={() => imprimirTicket(resultado.ticket_codigo)}
-                      className="flex-1 px-4 py-3 bg-slate-600 text-white font-medium rounded-xl hover:bg-slate-700"
+                      className="flex-1 px-4 py-3 bg-gray-600 text-white font-medium rounded-xl hover:bg-gray-700"
                     >
                       Imprimir
                     </button>
@@ -258,13 +258,6 @@ const Verificar = () => {
                 )}
               </div>
             )}
-
-            <button
-              onClick={reiniciar}
-              className="w-full mt-6 px-6 py-3 bg-white text-slate-700 font-medium rounded-xl hover:bg-slate-50 border border-slate-200 transition-all"
-            >
-              Continuar (otro empleado)
-            </button>
           </div>
         )}
       </main>
